@@ -1,0 +1,72 @@
+print("Welcome to Tick Tak Toe game!")
+def display_board(board):
+  """Displays the current state of the tic tac toe board"""
+  print("   |   |")
+  for i in range(3):
+    print(" " + board[i*3] + " | " + board[i*3 + 1] + " | " + board[i*3 + 2] + " ")
+    if i != 2:
+      print("---+---+---")
+  print("   |   |")
+
+def is_valid_move(board, position):
+  """Checks if a move is valid (position is empty)"""
+  return board[position] == ' '
+
+def make_move(board, player, position):
+  """Places the player's mark on the board at the specified position"""
+  board[position] = player
+
+def has_won(board, player):
+  """Checks if a player has won (has three marks in a row, column, or diagonal)"""
+  win_conditions = ((0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8), (2, 4, 6))
+  for condition in win_conditions:
+    if board[condition[0]] == player and board[condition[1]] == player and board[condition[2]] == player:
+      return True
+  return False
+
+def is_board_full(board):
+  """Checks if all positions on the board are filled"""
+  return not any(space == ' ' for space in board)
+
+def play_game():
+  """Main game loop"""
+  board = [' ' for _ in range(9)]
+  current_player = 'X'
+  game_over = False
+
+  while not game_over:
+    display_board(board)
+
+    
+    while True:
+      try:
+        position = int(input(f"Player {current_player}, enter your move (1-9): ")) - 1
+        if 0 <= position <= 8 and is_valid_move(board, position):
+          break
+        else:
+          print("Invalid move. Try again.")
+      except ValueError:
+        print("Please enter a number between 1 and 9.")
+
+    
+    make_move(board, current_player, position)
+    if has_won(board, current_player):
+      display_board(board)
+      print(f"Player {current_player} wins!")
+      print("© Designed by Irshadhullah")
+      game_over = True
+    elif is_board_full(board):
+      display_board(board)
+      print("It's a draw!")
+      game_over = True
+
+    
+    current_player = 'O' if current_player == 'X' else 'X'
+
+
+  play_again = input("Play again? (y/n): ")
+  if play_again.lower() == 'y':
+    play_game()
+
+if __name__ == "__main__":
+  play_game()
